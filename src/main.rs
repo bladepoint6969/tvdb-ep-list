@@ -131,13 +131,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 .takes_value(true)
                 .short('k')
                 .long("key")
-                .help("Update configured API key")
+                .help("Update configured API key"),
         )
-        .group(
-            ArgGroup::new("target")
-                .args(&["name", "id"])
-                .required(true),
-        )
+        .group(ArgGroup::new("target").args(&["name", "id"]).required(true))
         .get_matches();
 
     let mut cfg: Config = confy::load(env!("CARGO_PKG_NAME"))?;
