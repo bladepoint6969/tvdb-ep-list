@@ -57,6 +57,7 @@ async fn get_id_from_user() -> Option<usize> {
             },
         )
         .unwrap();
+        println!();
     });
 
     rx.await.unwrap()
@@ -82,6 +83,7 @@ async fn do_search(matches: ArgMatches, config: Config) -> Result<(), Box<dyn Er
             for series in series_results {
                 println!("{}: {}", series.series_name, series.id);
             }
+            println!();
             match get_id_from_user().await {
                 Some(id) => id,
                 None => return Ok(()), // User decided to abort
