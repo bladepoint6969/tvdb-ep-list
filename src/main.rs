@@ -1,12 +1,12 @@
 mod api;
 
-use std::error::Error;
+use std::{error::Error, io::Write};
 
-use api::API;
+use api::Api;
 use clap::{Arg, ArgGroup, ArgMatches, Command};
 use serde::{Deserialize, Serialize};
 
-const CHAR_REPLACE: [[&'static str; 2]; 9] = [
+const CHAR_REPLACE: [[&str; 2]; 9] = [
     ["\\", "-"],
     ["/", "-"],
     [":", " -"],
@@ -37,12 +37,35 @@ fn replace_chars(episode: String) -> String {
     episode
 }
 
+async fn get_id_from_user() -> Option<usize> {
+    let (tx, rx) = tokio::sync::oneshot::channel();
+
+    std::thread::spawn(move || {
+        print!("Multiple results found, enter a numeric ID (anything else to quit): ");
+        std::io::stdout().flush().unwrap();
+
+        tx.send(
+            match std::io::stdin()
+                .lines()
+                .next()
+                .unwrap()
+                .unwrap()
+                .parse::<usize>()
+            {
+                Ok(s) => Some(s),
+                Err(_) => None,
+            },
+        )
+        .unwrap();
+    });
+
+    rx.await.unwrap()
+}
+
 async fn do_search(matches: ArgMatches, config: Config) -> Result<(), Box<dyn Error>> {
-    let api = API::new(&config.api_key).await?;
+    let api = Api::new(&config.api_key).await?;
 
-    let target_series: usize;
-
-    if !matches.is_present("id") {
+    let target_series: usize = if !matches.is_present("id") {
         let series_results = api
             .search_series(
                 matches.value_of("name"),
@@ -54,17 +77,19 @@ async fn do_search(matches: ArgMatches, config: Config) -> Result<(), Box<dyn Er
             .await?;
 
         if series_results.len() == 1 {
-            target_series = series_results[0].id;
+            series_results[0].id
         } else {
             for series in series_results {
                 println!("{}: {}", series.series_name, series.id);
             }
-            println!("Multiple Series found, Please use the desired id with --id");
-            return Ok(());
+            match get_id_from_user().await {
+                Some(id) => id,
+                None => return Ok(()), // User decided to abort
+            }
         }
     } else {
-        target_series = matches.value_of("id").unwrap().parse().unwrap();
-    }
+        matches.value_of("id").unwrap().parse().unwrap()
+    };
 
     let series = api.get_series(target_series, None).await?;
 

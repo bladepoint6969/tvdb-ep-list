@@ -7,7 +7,7 @@ use reqwest::{
 };
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
-const BASE_PATH: &'static str = "https://api.thetvdb.com";
+const BASE_PATH: &str = "https://api.thetvdb.com";
 
 #[derive(Debug, Deserialize)]
 struct LoginResponse {
@@ -81,12 +81,12 @@ pub struct Episode {
     pub episode_name: Option<String>,
 }
 
-pub struct API {
+pub struct Api {
     client: Client,
     default_headers: HeaderMap,
 }
 
-impl API {
+impl Api {
     fn url<T: Display>(path: T) -> Result<Url, url::ParseError> {
         Url::parse(&format!("{BASE_PATH}{path}"))
     }
@@ -151,7 +151,7 @@ impl API {
 
         let response = self
             .client
-            .get(API::url("/search/series")?)
+            .get(Api::url("/search/series")?)
             .headers(headers)
             .query(&queries)
             .send()
@@ -173,7 +173,7 @@ impl API {
 
         let response = self
             .client
-            .get(API::url(format!("/series/{series_id}"))?)
+            .get(Api::url(format!("/series/{series_id}"))?)
             .headers(headers)
             .send()
             .await?;
@@ -201,7 +201,7 @@ impl API {
 
         let response = self
             .client
-            .get(API::url(format!("/series/{series_id}/episodes"))?)
+            .get(Api::url(format!("/series/{series_id}/episodes"))?)
             .headers(headers)
             .query(&[("page", page)])
             .send()
