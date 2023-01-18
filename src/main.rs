@@ -3,7 +3,7 @@ mod api;
 use std::{error::Error, io::Write};
 
 use api::Api;
-use clap::{Arg, ArgGroup, ArgMatches, Command};
+use clap::Parser;
 use serde::{Deserialize, Serialize};
 
 const CHAR_REPLACE: [[&str; 2]; 9] = [
@@ -37,7 +37,7 @@ fn replace_chars(episode: String) -> String {
     episode
 }
 
-async fn get_id_from_user() -> Option<usize> {
+async fn get_id_from_user() -> Option<u64> {
     let (tx, rx) = tokio::sync::oneshot::channel();
 
     std::thread::spawn(move || {
@@ -50,7 +50,7 @@ async fn get_id_from_user() -> Option<usize> {
                 .next()
                 .unwrap()
                 .unwrap()
-                .parse::<usize>()
+                .parse::<u64>()
             {
                 Ok(s) => Some(s),
                 Err(_) => None,
@@ -63,18 +63,13 @@ async fn get_id_from_user() -> Option<usize> {
     rx.await.unwrap()
 }
 
-async fn do_search(matches: ArgMatches, config: Config) -> Result<(), Box<dyn Error>> {
+async fn do_search(matches: Cli, config: Config) -> Result<(), Box<dyn Error>> {
     let api = Api::new(&config.api_key).await?;
 
-    let target_series: usize = if !matches.is_present("id") {
+    let target_series: u64 = if matches.id.is_none() {
+        let name = matches.name.expect("Has name");
         let series_results = api
-            .search_series(
-                matches.value_of("name"),
-                None,
-                None,
-                None,
-                matches.value_of("lang"),
-            )
+            .search_series(Some(&name), None, None, None, Some(&matches.lang))
             .await?;
 
         if series_results.len() == 1 {
@@ -90,7 +85,7 @@ async fn do_search(matches: ArgMatches, config: Config) -> Result<(), Box<dyn Er
             }
         }
     } else {
-        matches.value_of("id").unwrap().parse().unwrap()
+        matches.id.expect("Should have ID")
     };
 
     let series = api.get_series(target_series, None).await?;
@@ -115,59 +110,40 @@ async fn do_search(matches: ArgMatches, config: Config) -> Result<(), Box<dyn Er
     Ok(())
 }
 
+#[derive(Debug, Parser)]
+#[command(
+    name = "TVDB Episode List",
+    version,
+    author,
+    about = "Print an episode listing for the specified series"
+)]
+struct Cli {
+    #[arg(short, long, help = "Name of a series to search for")]
+    name: Option<String>,
+    #[arg(short, long, help = "Series ID", conflicts_with = "name", value_parser = clap::value_parser!(u64).range(1..))]
+    id: Option<u64>,
+    #[arg(
+        short,
+        long,
+        help = "Language code for API Results",
+        default_value = "en"
+    )]
+    lang: String,
+    #[arg(short, long, help = "Update configured API key")]
+    key: Option<String>,
+}
+
+static CONFIG_NAME: &str = env!("CARGO_PKG_NAME");
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let matches = Command::new("TVDB Episode list")
-        .version(option_env!("CARGO_PKG_VERSION").unwrap_or("0.0.0"))
-        .author(option_env!("CARGO_PKG_AUTHORS").unwrap_or("Unknown"))
-        .about("Print an episode listing for the specified series")
-        .arg(
-            Arg::new("name")
-                .takes_value(true)
-                .short('n')
-                .long("name")
-                .help("Name of a series to search for"),
-        )
-        .arg(
-            Arg::new("id")
-                .takes_value(true)
-                .short('i')
-                .long("id")
-                .help("Series ID")
-                .conflicts_with("name")
-                .validator(|v| {
-                    let size: usize = v.parse().unwrap_or_default();
+    let matches = Cli::parse();
 
-                    if size == 0 {
-                        Err("The ID must be a whole number greater than 0".to_string())
-                    } else {
-                        Ok(())
-                    }
-                }),
-        )
-        .arg(
-            Arg::new("lang")
-                .takes_value(true)
-                .short('l')
-                .long("lang")
-                .default_value("en")
-                .help("Language code for API Results"),
-        )
-        .arg(
-            Arg::new("key")
-                .takes_value(true)
-                .short('k')
-                .long("key")
-                .help("Update configured API key"),
-        )
-        .group(ArgGroup::new("target").args(&["name", "id"]).required(true))
-        .get_matches();
+    let mut cfg: Config = confy::load(CONFIG_NAME, Some(CONFIG_NAME))?;
 
-    let mut cfg: Config = confy::load(env!("CARGO_PKG_NAME"))?;
-
-    if matches.is_present("key") {
-        cfg.api_key = matches.value_of("key").unwrap().into();
-        confy::store(env!("CARGO_PKG_NAME"), cfg.clone()).ok();
+    if let Some(ref key) = matches.key {
+        cfg.api_key = key.clone();
+        confy::store(CONFIG_NAME, Some(CONFIG_NAME), cfg.clone()).ok();
     }
 
     do_search(matches, cfg).await

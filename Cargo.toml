@@ -1,7 +1,7 @@
 [package]
 edition = "2021"
 name = "tvdb-ep-list"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["Bennett Buckley <ben.buckley@outlook.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -10,7 +10,7 @@ authors = ["Bennett Buckley <ben.buckley@outlook.com>"]
 reqwest = {version = "0.11", features = ["json"]}
 serde = {version = "1", features = ["derive"]}
 tokio = {version = "1", features = ["rt-multi-thread", "sync", "macros"]}
-clap = "3"
+clap = { version = "4", features = ["derive"] }
 url = "2"
 async-recursion = "1"
-confy = "0.4"
+confy = "0.5"

@@ -43,7 +43,7 @@ struct SeriesSearch {
 
 #[derive(Debug, Deserialize)]
 pub struct Series {
-    pub id: usize,
+    pub id: u64,
     #[serde(rename = "seriesName")]
     pub series_name: String,
 }
@@ -56,7 +56,7 @@ struct SeriesDetailResponse {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SeriesDetail {
-    pub id: usize,
+    pub id: u64,
     pub series_name: String,
 }
 
@@ -70,7 +70,7 @@ struct EpisodeResponse {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct Links {
-    next: Option<usize>,
+    next: Option<u64>,
 }
 
 #[derive(Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd)]
@@ -162,7 +162,7 @@ impl Api {
 
     pub async fn get_series(
         &self,
-        series_id: usize,
+        series_id: u64,
         accept_language: Option<&str>,
     ) -> Result<SeriesDetail, Box<dyn Error>> {
         let mut headers = self.default_headers.clone();
@@ -186,7 +186,7 @@ impl Api {
 
     pub async fn get_series_episodes(
         &self,
-        series_id: usize,
+        series_id: u64,
     ) -> Result<Vec<Episode>, Box<dyn Error>> {
         self.get_eps_internal(series_id, 1).await
     }
@@ -194,8 +194,8 @@ impl Api {
     #[async_recursion]
     async fn get_eps_internal(
         &self,
-        series_id: usize,
-        page: usize,
+        series_id: u64,
+        page: u64,
     ) -> Result<Vec<Episode>, Box<dyn Error>> {
         let headers = self.default_headers.clone();
 
