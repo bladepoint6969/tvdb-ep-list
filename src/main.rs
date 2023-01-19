@@ -1,3 +1,5 @@
+#![deny(clippy::unwrap_used)]
+
 mod api;
 
 use std::{error::Error, io::Write};
@@ -38,29 +40,25 @@ fn replace_chars(episode: String) -> String {
 }
 
 async fn get_id_from_user() -> Option<u64> {
-    let (tx, rx) = tokio::sync::oneshot::channel();
-
-    std::thread::spawn(move || {
+    tokio::task::spawn_blocking(|| {
         print!("Multiple results found, enter a numeric ID (anything else to quit): ");
         std::io::stdout().flush().unwrap();
-
-        tx.send(
-            match std::io::stdin()
-                .lines()
-                .next()
-                .unwrap()
-                .unwrap()
-                .parse::<u64>()
-            {
-                Ok(s) => Some(s),
-                Err(_) => None,
-            },
-        )
-        .unwrap();
+        let id = match std::io::stdin()
+            .lines()
+            .next()
+            .expect("Some line from stdin")
+            .expect("Read from stdin")
+            .parse::<u64>()
+        {
+            Ok(s) => Some(s),
+            Err(_) => None,
+        };
         println!();
-    });
 
-    rx.await.unwrap()
+        id
+    })
+    .await
+    .expect("Got Input")
 }
 
 async fn do_search(matches: Cli, config: Config) -> Result<(), Box<dyn Error>> {
@@ -135,7 +133,7 @@ struct Cli {
 
 static CONFIG_NAME: &str = env!("CARGO_PKG_NAME");
 
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Box<dyn Error>> {
     let matches = Cli::parse();
 
