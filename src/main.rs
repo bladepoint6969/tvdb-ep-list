@@ -8,7 +8,7 @@ use api::Api;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 
-const CHAR_REPLACE: [[&str; 2]; 9] = [
+const CHAR_REPLACE: &[[&str; 2]] = &[
     ["\\", "-"],
     ["/", "-"],
     [":", " -"],
@@ -87,6 +87,7 @@ async fn do_search(matches: Cli, config: Config) -> Result<(), Box<dyn Error>> {
     };
 
     let series = api.get_series(target_series, None).await?;
+    let series_name = replace_chars(series.series_name);
 
     let mut episodes = api.get_series_episodes(series.id).await?;
 
@@ -100,8 +101,8 @@ async fn do_search(matches: Cli, config: Config) -> Result<(), Box<dyn Error>> {
         episode_name = replace_chars(episode_name);
 
         println!(
-            "{} - s{:0>2}e{:0>2} - {episode_name}",
-            series.series_name, episode.aired_season, episode.aired_episode_number
+            "{series_name} - s{:0>2}e{:0>2} - {episode_name}",
+            episode.aired_season, episode.aired_episode_number
         );
     }
 
