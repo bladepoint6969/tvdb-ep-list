@@ -2,10 +2,10 @@
 
 mod api;
 
-use std::{error::Error, io::Write};
+use std::{error::Error, fmt::Display, io::Write};
 
 use api::Api;
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use serde::{Deserialize, Serialize};
 
 const CHAR_REPLACE: &[[&str; 2]] = &[
@@ -99,14 +99,38 @@ async fn do_search(matches: Cli, config: Config) -> Result<(), Box<dyn Error>> {
             None => "".into(),
         };
         episode_name = replace_chars(episode_name);
+        let (season, ep) = match matches.ordering {
+            Ordering::Aired => (episode.aired_season, episode.aired_episode_number),
+            Ordering::Dvd => (
+                episode.dvd_season.unwrap_or(episode.aired_season),
+                episode
+                    .dvd_episode_number
+                    .unwrap_or(episode.aired_episode_number),
+            ),
+        };
 
         println!(
             "{series_name} - s{:0>2}e{:0>2} - {episode_name}",
-            episode.aired_season, episode.aired_episode_number
+            season, ep
         );
     }
 
     Ok(())
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum Ordering {
+    Aired,
+    Dvd,
+}
+
+impl Display for Ordering {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Ordering::Aired => write!(f, "aired"),
+            Ordering::Dvd => write!(f, "dvd"),
+        }
+    }
 }
 
 #[derive(Debug, Parser)]
@@ -117,6 +141,9 @@ async fn do_search(matches: Cli, config: Config) -> Result<(), Box<dyn Error>> {
     about = "Print an episode listing for the specified series"
 )]
 struct Cli {
+    #[arg(short, long, default_value_t = Ordering::Aired)]
+    /// The Episode ordering to use
+    ordering: Ordering,
     #[arg(short, long, help = "Name of a series to search for")]
     name: Option<String>,
     #[arg(short, long, help = "Series ID", conflicts_with = "name", value_parser = clap::value_parser!(u64).range(1..))]
@@ -141,7 +168,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut cfg: Config = confy::load(CONFIG_NAME, Some(CONFIG_NAME))?;
 
     if let Some(ref key) = matches.key {
-        cfg.api_key = key.clone();
+        cfg.api_key.clone_from(key);
         confy::store(CONFIG_NAME, Some(CONFIG_NAME), cfg.clone()).ok();
     }
 

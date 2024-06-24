@@ -78,6 +78,8 @@ struct Links {
 pub struct Episode {
     pub aired_season: i64,
     pub aired_episode_number: i64,
+    pub dvd_season: Option<i64>,
+    pub dvd_episode_number: Option<i64>,
     pub episode_name: Option<String>,
 }
 
