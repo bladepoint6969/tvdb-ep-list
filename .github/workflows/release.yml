@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*.*.*"
+  workflow_dispatch:
 
 jobs:
   create-github-release:
@@ -45,16 +46,7 @@ jobs:
           - { name: "macOS-arm64",        os: "macOS-latest",   target: "aarch64-apple-darwin",           artifact_suffix: "macos-arm64",     use-cross: true                          }
           - { name: "macOS-amd64",        os: "macOS-latest",   target: "x86_64-apple-darwin",            artifact_suffix: "macos"                                                     }
           - { name: "windows-amd64",      os: "windows-latest", target: "x86_64-pc-windows-msvc",         artifact_suffix: "windows"                                                   }
-          - { name: "windows-aarch64",    os: "windows-latest", target: "aarch64-pc-windows-msvc",        artifact_suffix: "windows-aarch64", use-cross: true                          }
           - { name: "linux-gnu",          os: "ubuntu-latest",  target: "x86_64-unknown-linux-gnu",       artifact_suffix: "linux"                                                     }
-          - { name: "linux-musl",         os: "ubuntu-latest",  target: "x86_64-unknown-linux-musl",      artifact_suffix: "linux-musl",      use-cross: true,                         }
-          - { name: "linux-aarch64-gnu",  os: "ubuntu-latest",  target: "aarch64-unknown-linux-gnu",      artifact_suffix: "aarch64-gnu",     use-cross: true, test-bin: "--bin tvdb-ep-list" }
-          - { name: "linux-aarch64-musl", os: "ubuntu-latest",  target: "aarch64-unknown-linux-musl",     artifact_suffix: "aarch64-musl",    use-cross: true, test-bin: "--bin tvdb-ep-list" }
-          - { name: "linux-arm-gnu",      os: "ubuntu-latest",  target: "arm-unknown-linux-gnueabi",      artifact_suffix: "armv6-gnu",       use-cross: true, test-bin: "--bin tvdb-ep-list" }
-          - { name: "linux-arm-musl",     os: "ubuntu-latest",  target: "arm-unknown-linux-musleabihf",   artifact_suffix: "armv6-musl",      use-cross: true, test-bin: "--bin tvdb-ep-list" }
-          - { name: "linux-armv7-gnu",    os: "ubuntu-latest",  target: "armv7-unknown-linux-gnueabihf",  artifact_suffix: "armv7-gnu",       use-cross: true, test-bin: "--bin tvdb-ep-list" }
-          - { name: "linux-armv7-musl",   os: "ubuntu-latest",  target: "armv7-unknown-linux-musleabihf", artifact_suffix: "armv7-musl",      use-cross: true, test-bin: "--bin tvdb-ep-list" }
-        rust: [stable]
 
     steps:
       - name: Checkout repository
@@ -95,14 +87,12 @@ jobs:
       - uses: taiki-e/install-action@cross
         if: ${{ matrix.job.use-cross }}
 
-      - name: Installing needed Ubuntu dependencies
-        if: matrix.job.os == 'ubuntu-latest'
+      - name: Installing needed x86_64 toolchain for MacOS
+        if: matrix.job.os == 'macOS-latest'
         shell: bash
         run: |
-          sudo apt-get -y update
           case ${{ matrix.job.target }} in
-            arm*-linux-*) sudo apt-get -y install gcc-arm-linux-gnueabihf ;;
-            aarch64-*-linux-*) sudo apt-get -y install gcc-aarch64-linux-gnu ;;
+            x86_64-apple-darwin) rustup target add x86_64-apple-darwin ;;
           esac
 
       - name: Build
