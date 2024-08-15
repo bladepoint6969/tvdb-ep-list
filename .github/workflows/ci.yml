@@ -6,6 +6,7 @@ on:
       - '**/Cargo.toml'
       - '**/Cargo.lock'
       - '**/*.rs'
+      - .github/workflows/ci.yml
   pull_request:
   schedule: [cron: "0 0 * * *"]
   workflow_dispatch:
@@ -28,16 +29,16 @@ jobs:
       - run: cargo test
 
   build:
-    name: build
+    name: build ${{matrix.job.name}}
     runs-on: ${{matrix.job.os}}
     strategy:
       fail-fast: false
       matrix:
         job:
-          - { name: "macOS-arm64",        os: "macOS-latest",   target: "aarch64-apple-darwin",           artifact_suffix: "macos-arm64",     use-cross: true                          }
-          - { name: "macOS-amd64",        os: "macOS-latest",   target: "x86_64-apple-darwin",            artifact_suffix: "macos"                                                     }
-          - { name: "windows-amd64",      os: "windows-latest", target: "x86_64-pc-windows-msvc",         artifact_suffix: "windows"                                                   }
-          - { name: "linux-gnu",          os: "ubuntu-latest",  target: "x86_64-unknown-linux-gnu",       artifact_suffix: "linux"                                                     }
+          - { name: "macOS-arm64",        os: "macOS-latest",   target: "aarch64-apple-darwin",           artifact_suffix: "macos-arm64"  }
+          - { name: "macOS-amd64",        os: "macOS-latest",   target: "x86_64-apple-darwin",            artifact_suffix: "macos"        }
+          - { name: "windows-amd64",      os: "windows-latest", target: "x86_64-pc-windows-msvc",         artifact_suffix: "windows"      }
+          - { name: "linux-gnu",          os: "ubuntu-latest",  target: "x86_64-unknown-linux-gnu",       artifact_suffix: "linux"        }
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
