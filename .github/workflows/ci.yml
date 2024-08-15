@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule: [cron: "0 0 * * *"]
+  workflow_dispatch:
+
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v3
+      - run: cargo test
+
+  build:
+    name: Rust ${{matrix.rust}} [${{matrix.runner}}]
+    runs-on: ${{matrix.runner}}
+    strategy:
+      fail-fast: false
+      matrix:
+        rust: ["1.63", stable]
+        runner: [ubuntu-latest, windows-latest]
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{matrix.rust}}
+      - run: cargo build
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v3
+      - run: cargo clippy
+
+  formatting:
+    name: Formatting
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v3
+      - run: cargo fmt --check
+
+  outdated:
+    name: Outdated
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/install@cargo-outdated
+      - run: cargo outdated
