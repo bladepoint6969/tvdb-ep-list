@@ -55,7 +55,6 @@ jobs:
         if: matrix.job.os == 'macOS-latest'
         shell: bash
         run: |
-          sudo apt-get -y update
           case ${{ matrix.job.target }} in
             x86_64-apple-darwin) rustup target add x86_64-apple-darwin ;;
           esac
