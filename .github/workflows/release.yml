@@ -43,10 +43,10 @@ jobs:
       matrix:
         # prettier-ignore
         job:
-          - { name: "macOS-arm64",        os: "macOS-latest",   target: "aarch64-apple-darwin",           artifact_suffix: "macos-arm64",     use-cross: true                          }
-          - { name: "macOS-amd64",        os: "macOS-latest",   target: "x86_64-apple-darwin",            artifact_suffix: "macos"                                                     }
-          - { name: "windows-amd64",      os: "windows-latest", target: "x86_64-pc-windows-msvc",         artifact_suffix: "windows"                                                   }
-          - { name: "linux-gnu",          os: "ubuntu-latest",  target: "x86_64-unknown-linux-gnu",       artifact_suffix: "linux"                                                     }
+          - { name: "macOS-arm64",        os: "macOS-latest",   target: "aarch64-apple-darwin",     use-cross: true }
+          - { name: "macOS-amd64",        os: "macOS-latest",   target: "x86_64-apple-darwin",                      }
+          - { name: "windows-amd64",      os: "windows-latest", target: "x86_64-pc-windows-msvc",                   }
+          - { name: "linux-gnu",          os: "ubuntu-latest",  target: "x86_64-unknown-linux-gnu",                 }
 
     steps:
       - name: Checkout repository
@@ -112,7 +112,7 @@ jobs:
             # strip the binary
             strip $BINARY_NAME
           fi
-          RELEASE_NAME=tvdb-ep-list-${{ matrix.job.artifact_suffix }}
+          RELEASE_NAME=tvdb-ep-list-${{ matrix.job.target }}
           tar czvf $RELEASE_NAME.tar.gz $BINARY_NAME
           # create sha checksum files
           certutil -hashfile $RELEASE_NAME.tar.gz sha256 | grep -E [A-Fa-f0-9]{64} > $RELEASE_NAME.sha256
@@ -132,7 +132,7 @@ jobs:
           BINARY_NAME=tvdb-ep-list
           # strip the binary
           "$STRIP" "$BINARY_NAME"
-          RELEASE_NAME=tvdb-ep-list-${{ matrix.job.artifact_suffix }}
+          RELEASE_NAME=tvdb-ep-list-${{ matrix.job.target }}
           tar czvf $RELEASE_NAME.tar.gz $BINARY_NAME
           # create sha checksum files
           shasum -a 256 $RELEASE_NAME.tar.gz > $RELEASE_NAME.sha256
