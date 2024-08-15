@@ -24,19 +24,15 @@ jobs:
       - run: cargo test
 
   build:
-    name: Rust ${{matrix.rust}} [${{matrix.runner}}]
+    name: Build on [${{matrix.runner}}]
     runs-on: ${{matrix.runner}}
     strategy:
       fail-fast: false
       matrix:
-        rust: ["1.63", stable]
         runner: [ubuntu-latest, windows-latest]
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: ${{matrix.rust}}
       - run: cargo build
 
   clippy:

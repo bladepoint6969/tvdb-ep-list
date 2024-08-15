@@ -2,6 +2,7 @@
 authors = ["Bennett Buckley <ben.buckley@outlook.com>"]
 description = "A command-line application for generating TV episode file names"
 edition = "2021"
+exclude = ["/.github", "/.vscode", ".pre-commit-config.yaml"]
 homepage = "https://github.com/bladepoint6969/tvdb-ep-list"
 keywords = ["tvdb"]
 license = "MIT OR Apache-2.0"
