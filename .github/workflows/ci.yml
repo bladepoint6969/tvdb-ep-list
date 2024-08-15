@@ -60,7 +60,7 @@ jobs:
           esac
 
       - name: Build
-        run: cargo build --release --target=${{ matrix.job.target }} --locked
+        run: cargo build --target=${{ matrix.job.target }} --locked
 
   clippy:
     name: Clippy
