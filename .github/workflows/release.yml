@@ -53,18 +53,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Cache Cargo registry
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('Cargo.lock') }}
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         if: startsWith(matrix.job.name, 'linux-')
         with:
           path: ~/.cargo/bin
           key: ${{ runner.os }}-cargo-bin-${{ hashFiles('.github/workflows/release.yml') }}
       - name: Get shared artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: artifacts
           path: artifacts
@@ -139,7 +139,7 @@ jobs:
           echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
 
       - name: Releasing assets
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             target/${{ matrix.job.target }}/release/${{ env.RELEASE_NAME }}.tar.gz
@@ -152,7 +152,7 @@ jobs:
           cp target/${{ matrix.job.target }}/release/${{ env.RELEASE_NAME }}.sha256 artifacts/
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: artifacts
           path: artifacts
