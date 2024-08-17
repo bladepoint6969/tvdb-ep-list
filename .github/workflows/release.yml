@@ -155,13 +155,3 @@ jobs:
             target/${{ matrix.job.target }}/release/${{ env.RELEASE_NAME }}.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Add SHA to artifacts
-      #   run: |
-      #     cp target/${{ matrix.job.target }}/release/${{ env.RELEASE_NAME }}.sha256 artifacts/
-
-      # - name: Upload artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: artifacts
-      #     path: artifacts
