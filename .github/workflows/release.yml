@@ -153,5 +153,6 @@ jobs:
           files: |
             target/${{ matrix.job.target }}/release/${{ env.RELEASE_NAME }}.tar.gz
             target/${{ matrix.job.target }}/release/${{ env.RELEASE_NAME }}.sha256
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
