@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    tags-ignore: ['*']
+    tags-ignore: ['**']
     paths:
       - '**/Cargo.toml'
       - '**/Cargo.lock'
