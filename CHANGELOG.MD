@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.11] - 2024-11-14
+
+### 📚 Documentation
+
+- Optimized changelog generation
+
 ## [0.4.10] - 2024-11-14
 
 ### 📚 Documentation
