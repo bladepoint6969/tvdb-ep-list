@@ -22,7 +22,7 @@ jobs:
         id: git-cliff
         with:
           config: cliff.toml
-          args: -vv --latest --strip header
+          args: --latest --strip header
         env:
           OUTPUT: CHANGES.md
           GITHUB_REPO: ${{ github.repository }}
@@ -171,7 +171,7 @@ jobs:
       - name: Releasing assets
         uses: softprops/action-gh-release@v2
         with:
-          body_path: CHANGES.md
+          body: ${{ needs.changelog.outputs.release_body }}
           files: |
             target/${{ matrix.job.target }}/release/${{ env.RELEASE_NAME }}.tar.gz
             target/${{ matrix.job.target }}/release/${{ env.RELEASE_NAME }}.sha256
