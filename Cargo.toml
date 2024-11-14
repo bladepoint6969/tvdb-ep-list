@@ -26,6 +26,7 @@ url = "2"
 
 [package.metadata.release]
 tag-message = "chore(release): Release {{crate_name}} version {{version}}"
+pre-release-commit-message = "chore(release): Release {{crate_name}} version {{version}}"
 pre-release-hook = [
     "git", "cliff", "-o", "CHANGELOG.MD", "--tag", "{{version}}"
 ]
