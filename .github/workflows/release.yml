@@ -6,6 +6,27 @@ on:
       - "v*.*.*"
 
 jobs:
+  changelog:
+    name: Generate changelog
+    runs-on: ubuntu-latest
+    outputs:
+      release_body: ${{ steps.git-cliff.outputs.content }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v4
+        id: git-cliff
+        with:
+          config: cliff.toml
+          args: -vv --latest --strip header
+        env:
+          OUTPUT: CHANGES.md
+          GITHUB_REPO: ${{ github.repository }}
+
   create-github-release:
     name: create-github-release
     runs-on: ubuntu-latest
@@ -33,7 +54,7 @@ jobs:
 
   build-release-artifacts:
     name: build-release
-    needs: [create-github-release]
+    needs: [create-github-release, changelog]
     runs-on: ${{ matrix.job.os }}
     env:
       RUST_BACKTRACE: 1
@@ -150,9 +171,9 @@ jobs:
       - name: Releasing assets
         uses: softprops/action-gh-release@v2
         with:
+          body_path: CHANGES.md
           files: |
             target/${{ matrix.job.target }}/release/${{ env.RELEASE_NAME }}.tar.gz
             target/${{ matrix.job.target }}/release/${{ env.RELEASE_NAME }}.sha256
-          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
