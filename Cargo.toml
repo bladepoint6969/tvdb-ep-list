@@ -23,3 +23,6 @@ reqwest = { version = "0.12", default-features = false, features = [
 serde = { version = "1", features = ["derive"] }
 tokio = { version = "1", features = ["rt", "macros"] }
 url = "2"
+
+[package.metadata.release]
+tag-message = "chore(release): Release {{crate_name}} version {{version}}"
