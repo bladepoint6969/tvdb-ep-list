@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.10] - 2024-11-14
+
+### 📚 Documentation
+
+- Add Changelog
+- Update changelog generation
+
+### Security
+
+- Update dependencies
+
 ## [0.4.9] - 2024-11-03
 
 ### ⚙️ Miscellaneous Tasks
