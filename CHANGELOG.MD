@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.12] - 2024-11-25
+
+### ⚙️ Miscellaneous Tasks
+
+- Ignore tags in CI builds
+- Update dependencies
+
 ## [0.4.11] - 2024-11-14
 
 ### 📚 Documentation
