@@ -30,10 +30,10 @@ is located at `$HOME/.config/tvdb-ep-list/tvdb-ep-list.toml` on Linux and
 ## License
 
 * [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
-  ([LICENSE-APACHE](https://github.com/bladepoint6969/wanikani/blob/HEAD/LICENSE-APACHE))
+  ([LICENSE-APACHE](https://github.com/bladepoint6969/tvdb-ep-list/blob/HEAD/LICENSE-APACHE))
 
 * [MIT License](https://opensource.org/licenses/MIT)
-  ([LICENSE-MIT](https://github.com/bladepoint6969/wanikani/blob/HEAD/LICENSE-MIT))
+  ([LICENSE-MIT](https://github.com/bladepoint6969/tvdb-ep-list/blob/HEAD/LICENSE-MIT))
 
 [crates.io]: https://crates.io/crates/tvdb-ep-list
 [License]: https://img.shields.io/crates/l/tvdb-ep-list.svg?
