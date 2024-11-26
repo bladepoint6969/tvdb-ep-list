@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.14] - 2024-11-26
+
+### 🐛 Bug Fixes
+
+- Episode listings with no titles
+
 ## [0.4.13] - 2024-11-26
 
 ### 📚 Documentation
