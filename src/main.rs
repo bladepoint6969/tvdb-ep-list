@@ -109,10 +109,17 @@ async fn do_search(matches: Cli, config: Config) -> Result<(), Box<dyn Error>> {
             ),
         };
 
-        println!(
-            "{series_name} - s{:0>2}e{:0>2} - {episode_name}",
-            season, ep
-        );
+        if episode_name.is_empty() {
+            println!(
+                "{series_name} - s{:0>2}e{:0>2}",
+                season, ep
+            );
+        } else {
+            println!(
+                "{series_name} - s{:0>2}e{:0>2} - {episode_name}",
+                season, ep
+            );
+        }
     }
 
     Ok(())
