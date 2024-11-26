@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.13] - 2024-11-26
+
+### 📚 Documentation
+
+- Fix links in README
+
+### ⚙️ Miscellaneous Tasks
+
+- Create dependabot.yml
+- Update dependabot to update actions
+- Properly set dependabot prefixes
+
 ## [0.4.12] - 2024-11-25
 
 ### ⚙️ Miscellaneous Tasks
