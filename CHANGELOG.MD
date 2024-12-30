@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.15] - 2024-12-30
+
+### ⚙️ Miscellaneous Tasks
+
+- Update dependencies
+
 ## [0.4.14] - 2024-11-26
 
 ### 🐛 Bug Fixes
