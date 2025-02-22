@@ -3,11 +3,12 @@ use std::{error::Error, fmt::Display};
 use async_recursion::async_recursion;
 use reqwest::{
     header::{self, HeaderMap},
-    Client, Response, StatusCode, Url,
+    Client, ClientBuilder, Response, StatusCode, Url,
 };
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
 const BASE_PATH: &str = "https://api.thetvdb.com";
+const USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);
 
 #[derive(Debug, Deserialize)]
 struct LoginResponse {
@@ -98,7 +99,7 @@ impl Api {
             apikey: api_key.into(),
         };
 
-        let client = Client::new();
+        let client = ClientBuilder::new().user_agent(USER_AGENT).build()?;
 
         let login_resp = client
             .post(Self::url("/login")?)
