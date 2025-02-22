@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.18] - 2025-02-22
+
+### 🚀 Features
+
+- Add user agent to requests
+
+### Security
+
+- Use native TLS to resolve ring advisory
+
 ## [0.4.15] - 2024-12-30
 
 ### ⚙️ Miscellaneous Tasks
