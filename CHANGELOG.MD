@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.19] - 2025-02-28
+
+### ◀️ Revert
+
+- Return to `rustls`
+
 ## [0.4.18] - 2025-02-22
 
 ### 🚀 Features
