@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.20] - 2025-03-07
+
+### Security
+
+- Update dependencies
+
 ## [0.4.19] - 2025-02-28
 
 ### ◀️ Revert
