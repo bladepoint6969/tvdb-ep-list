@@ -2,10 +2,10 @@ use std::{error::Error, fmt::Display};
 
 use async_recursion::async_recursion;
 use reqwest::{
-    header::{self, HeaderMap},
     Client, ClientBuilder, Response, StatusCode, Url,
+    header::{self, HeaderMap},
 };
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de::DeserializeOwned};
 
 const BASE_PATH: &str = "https://api.thetvdb.com";
 const USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"),);

@@ -43,16 +43,13 @@ async fn get_id_from_user() -> Option<u64> {
     tokio::task::spawn_blocking(|| {
         print!("Multiple results found, enter a numeric ID (anything else to quit): ");
         std::io::stdout().flush().expect("Flushing stdio buffer");
-        let id = match std::io::stdin()
+        let id = std::io::stdin()
             .lines()
             .next()
             .expect("Some line from stdin")
             .expect("Read from stdin")
             .parse::<u64>()
-        {
-            Ok(s) => Some(s),
-            Err(_) => None,
-        };
+            .ok();
         println!();
 
         id
