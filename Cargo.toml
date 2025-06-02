@@ -8,7 +8,7 @@ keywords = ["tvdb"]
 license = "MIT OR Apache-2.0"
 name = "tvdb-ep-list"
 repository = "https://github.com/bladepoint6969/tvdb-ep-list"
-version = "0.4.23"
+version = "0.4.24"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
