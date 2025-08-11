@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.25] - 2025-08-11
+
+### ⚙️ Miscellaneous Tasks
+
+- License updates
+
 ## [0.4.24] - 2025-06-02
 
 ### 🚜 Refactor
