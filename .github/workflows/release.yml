@@ -85,7 +85,7 @@ jobs:
         name: Cache Cargo registry
         with:
           path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/cache@v4
         if: startsWith(matrix.job.name, 'linux-')
         with:
