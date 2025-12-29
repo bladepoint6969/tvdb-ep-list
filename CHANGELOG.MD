@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.28] - 2025-12-29
+
+### ⚙️ Miscellaneous Tasks
+
+- Update pre-commit hooks
+- Update action cache patterns
+- Temporarily disable caching on macOS
+- Try re-enabling caching
+
 ## [0.4.25] - 2025-08-11
 
 ### ⚙️ Miscellaneous Tasks
