@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.29] - 2026-01-28
+
+### 🚜 Refactor
+
+- Use arg groups for target choice
+
+### ⚙️ Miscellaneous Tasks
+
+- Add conventional commit hook
+
 ## [0.4.28] - 2025-12-29
 
 ### ⚙️ Miscellaneous Tasks
