@@ -1,5 +1,3 @@
-#![deny(clippy::unwrap_used)]
-
 mod api;
 
 use std::{error::Error, fmt::Display, io::Write};
