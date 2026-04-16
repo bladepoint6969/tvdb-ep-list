@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.32] - 2026-04-16
+
+### 🚜 Refactor
+
+- Move linting rules to Cargo.toml
+
+## [0.4.31] - 2026-03-21
+
+### ⚙️ Miscellaneous Tasks
+
+- Update release workflow
+
 ## [0.4.29] - 2026-01-28
 
 ### 🚜 Refactor
