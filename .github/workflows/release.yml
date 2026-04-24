@@ -32,6 +32,7 @@ jobs:
     runs-on: ${{ matrix.job.os }}
     env:
       RUST_BACKTRACE: 1
+      RELEASE_NAME: tvdb-ep-list-unset
     strategy:
       fail-fast: true
       matrix:
