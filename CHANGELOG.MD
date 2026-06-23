@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.34] - 2026-06-23
+
+### ⚙️ Miscellaneous Tasks
+
+- Update action versions
+- Set default release name
+- Bump actions/checkout from 6 to 7
+
 ## [0.4.32] - 2026-04-16
 
 ### 🚜 Refactor
