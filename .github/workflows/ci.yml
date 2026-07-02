@@ -52,12 +52,12 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/cache@v5
+      - uses: actions/cache@v6
         name: Cache Cargo registry
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-      - uses: actions/cache@v5
+      - uses: actions/cache@v6
         if: startsWith(matrix.job.name, 'linux-')
         with:
           path: ~/.cargo/bin
