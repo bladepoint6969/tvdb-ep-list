@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.35] - 2026-07-27
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump actions/cache from 5 to 6
+
 ## [0.4.34] - 2026-06-23
 
 ### ⚙️ Miscellaneous Tasks
