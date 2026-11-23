@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.40] - 2026-11-23
+
+### ⚙️ Miscellaneous Tasks
+
+- Update pre-commit hooks
+
 ## [0.4.38] - 2026-10-15
 
 ### ⚙️ Miscellaneous Tasks
